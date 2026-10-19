@@ -1,378 +1,402 @@
-
-<!doctype html>
+ 
+<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080b14">
-<title>Nifnyx AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b16">
+<title>Nifnyx AI — Your AI Workspace</title>
 <style>
-:root{color-scheme:dark;--bg:#080b14;--panel:#101726;--panel2:#151f32;--line:#26344d;--text:#edf3ff;--muted:#93a2bd;--blue:#5b8cff;--violet:#a66cff;--good:#6de0ad;--warn:#ffd37d}
+:root{
+  --bg:#080b16;--panel:#101629;--panel2:#151d34;--line:#26314d;
+  --text:#f1f5ff;--muted:#98a5c2;--blue:#65a7ff;--purple:#a78bfa;
+  --good:#65e6b5;--bad:#ff8298
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1c2c52 0,transparent 55%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100dvh}
-.app{height:100dvh;max-width:1000px;margin:auto;display:flex;flex-direction:column;overflow:hidden;background:#080b14cc}
-.topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #ffffff12;background:#0a101ee8;backdrop-filter:blur(18px)}
-.logo{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--violet));font-size:23px;box-shadow:0 6px 25px #638bff35}
-.brand{flex:1;min-width:0}
-.brand h1{font-size:18px;letter-spacing:.2px;margin:0}
-.brand p{font-size:11px;color:var(--muted);margin:3px 0 0}
-.pill{font-size:10px;padding:6px 9px;border:1px solid #ffffff1b;border-radius:20px;color:var(--warn);white-space:nowrap}
-.iconbtn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font-size:17px}
-.subbar{padding:9px 15px;border-bottom:1px solid #ffffff0c;color:var(--muted);font-size:11px;display:flex;align-items:center;gap:8px}
-.dot{width:7px;height:7px;border-radius:50%;background:#e6ad51;box-shadow:0 0 10px #e6ad5166}
-.dot.ok{background:var(--good);box-shadow:0 0 10px #6de0ad66}
-.chat{flex:1;overflow:auto;padding:22px 15px 18px;display:flex;flex-direction:column;gap:19px;scroll-behavior:smooth}
-.welcome{margin:auto 0;text-align:center;padding:24px 6px;animation:rise .5s ease}
-.orb{width:84px;height:84px;border-radius:28px;margin:0 auto 20px;display:grid;place-items:center;font-size:38px;background:linear-gradient(140deg,#1c3d82,#663e9d);box-shadow:0 0 45px #638bff25;animation:float 3.5s ease-in-out infinite}
-.welcome h2{font-size:clamp(23px,5vw,30px);margin:0 0 10px}
-.welcome p{color:var(--muted);font-size:13px;line-height:1.7;max-width:400px;margin:0 auto}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
-.chips button{background:#111a2b;border:1px solid var(--line);color:#dce7ff;border-radius:14px;padding:10px 12px;font-size:12px}
-.chips button:active,.iconbtn:active{transform:scale(.97)}
-.message{display:flex;gap:9px;animation:rise .22s ease;align-items:flex-start}
-.message.user{flex-direction:row-reverse}
-.avatar{width:32px;height:32px;flex-shrink:0;border-radius:11px;display:grid;place-items:center;background:#192a48;font-size:14px}
-.user .avatar{background:#244a91}
-.content{max-width:min(86%,720px);min-width:0}
-.label{font-size:10px;color:var(--muted);margin:2px 0 6px}
-.user .label{text-align:right}
-.bubble{white-space:pre-wrap;overflow-wrap:anywhere;background:linear-gradient(145deg,#111a2a,#101624);border:1px solid var(--line);padding:12px 14px;border-radius:5px 16px 16px;font-size:14px;line-height:1.7}
-.user .bubble{background:linear-gradient(145deg,#1d3c75,#172c54);border-color:#35558c;border-radius:16px 5px 16px 16px}
-.attached-img{display:block;max-width:min(260px,100%);max-height:260px;object-fit:contain;border-radius:12px;margin-bottom:8px;border:1px solid #ffffff20}
-.typing{color:var(--muted);letter-spacing:3px}
-.composer-wrap{padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0b111e;border-top:1px solid #ffffff12}
-.preview{display:flex;align-items:center;gap:10px;margin:0 2px 9px;padding:8px;background:#121c2e;border:1px solid var(--line);border-radius:13px}
-.preview img{width:48px;height:48px;object-fit:cover;border-radius:8px}
-.preview .pname{flex:1;min-width:0;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
-.preview button{border:0;background:#28354b;color:white;border-radius:9px;width:30px;height:30px}
-.composer{display:flex;gap:8px;align-items:flex-end;padding:8px;border:1px solid #2a3954;border-radius:19px;background:#111a2a;box-shadow:0 8px 28px #0002}
-.toolbtn{width:42px;height:42px;flex-shrink:0;border:1px solid #293853;border-radius:13px;background:#19253a;color:#d9e6ff;font-size:19px}
-.composer textarea{flex:1;min-width:0;resize:none;max-height:125px;min-height:42px;border:0;outline:0;background:transparent;color:var(--text);padding:11px 4px;font:inherit;font-size:14px}
-.composer textarea::placeholder{color:#7485a2}
-.send{width:43px;height:43px;flex-shrink:0;border:0;border-radius:14px;background:linear-gradient(135deg,var(--blue),#775bff);color:#fff;font-size:19px;box-shadow:0 5px 18px #4778ff35}
-.send:disabled,.toolbtn:disabled{opacity:.45}
-.footnote{text-align:center;color:#6f809d;font-size:10px;margin:8px 0 0}
-.hidden{display:none!important}
-.toast{font-size:12px;color:var(--warn);padding:0 4px 7px;white-space:pre-wrap}
-.welcome .small{margin-top:14px;font-size:10px;color:#71819a}
-@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@media(min-width:650px){.app{border-left:1px solid #ffffff0a;border-right:1px solid #ffffff0a}.topbar{padding:17px 22px}.chat{padding:28px 24px}.composer-wrap{padding:14px 24px 17px}.content{max-width:82%}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+body{margin:0;background:radial-gradient(ellipse at 80% -10%,#25205a 0,transparent 38%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+.app{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:100vh}
+.sidebar{border-right:1px solid var(--line);background:#0a0e1bec;padding:22px 14px;display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;align-items:center;gap:11px;padding:5px 8px}
+.logo{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#448bff,#9a67ff);box-shadow:0 0 30px #6861ff55;font-weight:900;font-size:21px}
+.brand h1{font-size:19px;margin:0;letter-spacing:.3px}.brand small{color:var(--muted)}
+.nav-label{font-size:10px;letter-spacing:1.7px;color:#7281a5;padding:0 12px;margin:8px 0}
+.nav{display:grid;gap:6px}
+.nav button,.newchat{width:100%;border:1px solid transparent;background:transparent;text-align:left;padding:12px;border-radius:12px;color:#aeb9d4;display:flex;gap:11px;align-items:center;transition:.2s}
+.nav button:hover,.nav button.active{background:linear-gradient(100deg,#263b68aa,#5c3b8c33);border-color:#5269a5;color:white;transform:translateX(2px)}
+.newchat{justify-content:center;background:linear-gradient(100deg,#3478e9,#8054d9);color:white;font-weight:700;border:0}
+.status{margin-top:auto;padding:13px;background:#11182a;border:1px solid var(--line);border-radius:14px;font-size:12px;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;background:var(--good);border-radius:50%;margin-right:6px;box-shadow:0 0 10px #65e6b5}
+main{min-width:0;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:10px;background:#080b1688;backdrop-filter:blur(16px);position:sticky;top:0;z-index:3}
+.topbar h2{font-size:16px;margin:0}.pill{font-size:11px;padding:7px 10px;border:1px solid #35466e;border-radius:20px;color:#b9caff;background:#121a31}
+.content{width:min(1100px,100%);margin:0 auto;padding:28px;flex:1}
+.view{display:none;animation:enter .3s ease}.view.active{display:block}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{padding:25px 0 23px}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--blue);font-weight:800}
+.hero h2{font-size:clamp(27px,4vw,43px);line-height:1.12;margin:12px 0;background:linear-gradient(100deg,#fff,#a5bfff 55%,#bd9cff);background-clip:text;color:transparent}
+.hero p{color:var(--muted);line-height:1.7;margin:0;max-width:620px}
+.card{background:linear-gradient(145deg,#121a30ed,#0e1425);border:1px solid var(--line);border-radius:20px;padding:19px;box-shadow:0 16px 45px #0002}
+.chatbox{display:flex;flex-direction:column;min-height:430px}
+.messages{display:flex;flex-direction:column;gap:16px;padding:12px 0 22px;min-height:250px}
+.msg{max-width:92%;padding:14px 16px;border:1px solid var(--line);border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:14px}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,#213b70,#3b286a);border-color:#5366a5}
+.msg.ai{align-self:flex-start;background:#151d31}
+.msg .who{display:block;font-size:10px;letter-spacing:1px;color:#a6bbff;font-weight:800;margin-bottom:6px}
+.composer{border:1px solid #344263;border-radius:16px;background:#0b1020;padding:12px;box-shadow:0 0 0 3px #6b7cff08}
+textarea,input{width:100%;background:transparent;border:0;outline:0;color:var(--text);resize:vertical}
+#prompt{min-height:100px;max-height:340px;font-size:14px;line-height:1.6}
+.compose-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+.tools{display:flex;gap:7px;flex-wrap:wrap}
+.btn{border:1px solid #344263;background:#18223a;padding:10px 13px;border-radius:11px;font-size:12px;transition:.2s}
+.btn:hover{border-color:#779dff;transform:translateY(-1px)}
+.btn.primary{border:0;background:linear-gradient(100deg,#3478ee,#8a58dd);font-weight:800}
+.btn.danger{color:#ff9dad}
+.btn:disabled{opacity:.5;cursor:wait;transform:none}
+.small{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.feature{cursor:pointer;transition:.25s;min-height:135px}
+.feature:hover{transform:translateY(-4px);border-color:#596da8}
+.feature .ico{font-size:24px;margin-bottom:13px}
+.feature h3{margin:0 0 7px;font-size:15px}.feature p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+.section-title{font-size:23px;margin:5px 0 8px}.sub{color:var(--muted);font-size:13px;line-height:1.7;margin:0 0 22px}
+.field{display:grid;gap:9px;margin:15px 0}.field label{font-size:12px;color:#b7c5e5}
+.field input,.field textarea{border:1px solid #303e5f;background:#0b1121;border-radius:12px;padding:12px;font-size:13px}
+.preview{width:100%;max-height:390px;object-fit:contain;border:1px solid var(--line);border-radius:14px;background:#080b16;margin-top:14px}
+.result{white-space:pre-wrap;line-height:1.7;overflow-wrap:anywhere;color:#e0e8ff;font-size:14px;margin-top:17px}
+.list{display:grid;gap:9px}
+.list-item{padding:13px;border:1px solid var(--line);border-radius:12px;background:#11182a;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.list-item strong{font-size:13px;overflow-wrap:anywhere}.list-item small{display:block;color:var(--muted);margin-top:5px}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gallery figure{margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#11182a}
+.gallery img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.gallery figcaption{padding:10px;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #344263;border-radius:14px;font-size:13px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#18233b;border:1px solid #40547e;padding:12px 17px;border-radius:12px;z-index:9;font-size:13px;transition:.25s;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-menu{display:none}
+@media(max-width:800px){
+ .app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:8;inset:0 auto 0 0;width:255px;transform:translateX(-105%);transition:.25s;box-shadow:20px 0 60px #0008}
+ .sidebar.open{transform:translateX(0)}.mobile-menu{display:inline-block}.topbar{padding:0 15px;height:62px}
+ .content{padding:19px 14px 28px}.hero{padding-top:12px}.grid{grid-template-columns:1fr 1fr}.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .msg{max-width:98%}.chatbox{min-height:380px}
+}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.pill{display:none}.gallery{grid-template-columns:1fr 1fr}.card{padding:14px}.btn{padding:10px}}
 </style>
 </head>
 <body>
 <div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">N</div><div><h1>Nifnyx AI</h1><small>Your AI workspace</small></div></div>
+  <button class="newchat" onclick="newChat()">＋ &nbsp; Chat Baru</button>
+  <div><div class="nav-label">WORKSPACE</div>
+    <nav class="nav">
+      <button class="active" data-view="chat">◈ &nbsp; Chat AI</button>
+      <button data-view="analyze">⌕ &nbsp; Analisis Foto</button>
+      <button data-view="gallery">▧ &nbsp; Galeri Gambar</button>
+      <button data-view="files">▤ &nbsp; File Saya</button>
+      <button data-view="generate">✧ &nbsp; Buat Gambar AI</button>
+      <button data-view="history">◷ &nbsp; Riwayat Chat</button>
+    </nav>
+  </div>
+  <div class="status"><span class="dot"></span><span id="statusText">Memeriksa server...</span><br><span class="small">Nifnyx workspace · v2.0</span></div>
+</aside>
+
+<main>
 <header class="topbar">
-  <div class="logo">✦</div>
-  <div class="brand"><h1>Nifnyx AI</h1><p>Teman berpikir • Chat & analisis gambar</p></div>
-  <span class="pill" id="modePill">MENYAMBUNG…</span>
-  <button class="iconbtn" id="newChat" title="Chat baru" aria-label="Chat baru">↻</button>
+  <div style="display:flex;align-items:center;gap:12px"><button class="btn mobile-menu" onclick="toggleMenu()">☰</button><h2 id="pageTitle">Chat AI</h2></div>
+  <span class="pill">✦ AI WORKSPACE</span>
 </header>
+<div class="content">
 
-<div class="subbar">
-  <span class="dot" id="statusDot"></span>
-  <span id="statusText">Memeriksa koneksi backend…</span>
-</div>
-
-<main class="chat" id="chat" aria-live="polite">
-<section class="welcome" id="welcome">
-  <div class="orb">✦</div>
-  <h2>Hai, gw Nifnyx.</h2>
-  <p>Asisten AI buatan lu. Tanya apa aja atau belajar bareng. Analisis gambar akan tersedia setelah backend vision dipasang.</p>
-  <div class="chips">
-    <button data-q="Jelaskan apa itu kecerdasan buatan dengan bahasa sederhana">✦ Jelaskan AI</button>
-    <button data-q="Bantu aku belajar IPA kelas 7">⚗️ Belajar IPA</button>
-    <button data-q="Bantu aku memahami kode HTML ini">⌘ Bantu coding</button>
-    <button data-q="Apa saja yang bisa kamu analisis dari sebuah gambar?">▧ Analisis gambar</button>
+<section class="view active" id="view-chat">
+  <div class="hero"><div class="eyebrow">PERSONAL AI ASSISTANT</div><h2>Ide besar dimulai<br>dari satu prompt.</h2><p>Ngobrol, belajar, bikin ide, atau analisis file dalam satu workspace. Tulis prompt panjangmu dan mulai dari sini.</p></div>
+  <div class="card chatbox">
+    <div id="messages" class="messages"><div class="msg ai"><span class="who">NIFNYX AI</span>Yo bro! 👋 Gue Nifnyx AI. Mau bahas apa hari ini?</div></div>
+    <div id="attachmentList" class="small"></div>
+    <div class="composer">
+      <textarea id="prompt" maxlength="30000" placeholder="Tulis prompt panjang di sini... (maks. 30.000 karakter)" oninput="updateCount()"></textarea>
+      <div class="compose-foot"><div class="tools">
+        <button class="btn" onclick="document.getElementById('chatFiles').click()">＋ File</button>
+        <button class="btn" onclick="clearAttachments()">Hapus lampiran</button>
+      </div><div class="tools"><span class="small" id="count">0 / 30.000</span><button class="btn primary" id="sendBtn" onclick="sendChat()">Kirim ↗</button></div></div>
+      <input id="chatFiles" type="file" hidden multiple accept="image/png,image/jpeg,image/webp,application/pdf,text/plain" onchange="uploadAttachments(this.files)">
+    </div>
+    <p class="small">Batas karakter aplikasi bukan batas token model. Prompt yang sangat panjang mungkin tetap melebihi konteks provider.</p>
   </div>
-  <p class="small">Jawaban AI dapat keliru. Jangan unggah gambar pribadi atau rahasia.</p>
+  <div class="grid" style="margin-top:14px">
+    <div class="card feature" onclick="showView('analyze')"><div class="ico">⌕</div><h3>Analisis foto</h3><p>Unggah gambar dan minta AI menjelaskan isinya.</p></div>
+    <div class="card feature" onclick="showView('generate')"><div class="ico">✧</div><h3>Image studio</h3><p>Buat gambar dari deskripsi teks jika model tersedia.</p></div>
+    <div class="card feature" onclick="showView('files')"><div class="ico">▤</div><h3>File workspace</h3><p>Kelola file yang diunggah ke server.</p></div>
+    <div class="card feature" onclick="showView('history')"><div class="ico">◷</div><h3>Riwayat chat</h3><p>Lanjutkan percakapan yang tersimpan.</p></div>
+  </div>
 </section>
-</main>
 
-<footer class="composer-wrap">
-  <div id="toast" class="toast hidden"></div>
-  <div id="preview" class="preview hidden">
-    <img id="previewImg" alt="Pratinjau gambar">
-    <div class="pname" id="previewName"></div>
-    <button id="removeImage" type="button" aria-label="Hapus gambar">×</button>
+<section class="view" id="view-analyze">
+  <h2 class="section-title">Analisis Foto</h2><p class="sub">Pilih foto, tulis apa yang ingin diketahui, lalu kirim ke model vision yang dikonfigurasi di server.</p>
+  <div class="card">
+    <div class="field"><label>Foto (JPG, PNG, WEBP · maksimal 5 MB)</label><input type="file" id="analyzeFile" accept="image/png,image/jpeg,image/webp" onchange="previewImage(this,'analyzePreview')"></div>
+    <img id="analyzePreview" class="preview" hidden alt="Pratinjau foto">
+    <div class="field"><label>Instruksi analisis</label><textarea id="analyzePrompt" maxlength="5000" rows="3">Jelaskan isi gambar ini secara rinci dan terstruktur.</textarea></div>
+    <button class="btn primary" id="analyzeBtn" onclick="analyzePhoto()">Analisis Foto ✦</button>
+    <div id="analyzeResult" class="result"></div>
   </div>
-  <form class="composer" id="form">
-    <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden">
-    <button type="button" id="attach" class="toolbtn" title="Lampirkan gambar" aria-label="Lampirkan gambar">＋</button>
-    <textarea id="input" rows="1" placeholder="Tulis pesan ke Nifnyx…" aria-label="Pesan"></textarea>
-    <button class="send" id="send" type="submit" aria-label="Kirim">➤</button>
-  </form>
-  <p class="footnote">Nifnyx AI • Chat teks melalui backend aman</p>
-</footer>
+</section>
+
+<section class="view" id="view-gallery">
+  <h2 class="section-title">Galeri Gambar</h2><p class="sub">Koleksi gambar yang berhasil dibuat oleh Nifnyx AI.</p>
+  <button class="btn" onclick="loadGallery()">↻ Refresh galeri</button>
+  <div id="galleryGrid" class="gallery" style="margin-top:17px"></div>
+</section>
+
+<section class="view" id="view-files">
+  <h2 class="section-title">File Saya</h2><p class="sub">Upload file JPG, PNG, WEBP, PDF, atau TXT. Ukuran maksimal 5 MB per file.</p>
+  <div class="card">
+    <div class="field"><label>Pilih file</label><input type="file" id="uploadFile" accept="image/png,image/jpeg,image/webp,application/pdf,text/plain"></div>
+    <button class="btn primary" onclick="uploadSingleFile()">Upload ke server ↑</button>
+  </div>
+  <div id="fileList" class="list" style="margin-top:16px"></div>
+</section>
+
+<section class="view" id="view-generate">
+  <h2 class="section-title">Buat Gambar AI</h2><p class="sub">Deskripsikan gambar yang kamu inginkan. Fitur ini membutuhkan model image-generation yang tersedia pada OpenRouter dan mungkin menggunakan kredit berbayar.</p>
+  <div class="card">
+    <div class="field"><label>Prompt gambar</label><textarea id="imagePrompt" maxlength="4000" rows="5" placeholder="Contoh: kota futuristik saat malam, neon biru-ungu, cinematic lighting, detail tinggi..."></textarea></div>
+    <button class="btn primary" id="generateBtn" onclick="generateImage()">✧ Generate Image</button>
+    <div id="generateResult" class="result"></div>
+  </div>
+</section>
+
+<section class="view" id="view-history">
+  <h2 class="section-title">Riwayat Chat</h2><p class="sub">Percakapan yang disimpan di server.</p>
+  <button class="btn" onclick="loadHistory()">↻ Refresh riwayat</button>
+  <div id="historyList" class="list" style="margin-top:16px"></div>
+</section>
+
 </div>
+</main>
+</div>
+<div id="toast" class="toast"></div>
 
 <script>
 const $ = id => document.getElementById(id);
-const chat = $("chat");
-const form = $("form");
-const input = $("input");
-const send = $("send");
-const imageInput = $("imageInput");
-
+let conversationId = null;
+let attachments = [];
 let busy = false;
-let history = [];
-let selectedImage = null;
+const titles = {
+  chat:"Chat AI", analyze:"Analisis Foto", gallery:"Galeri Gambar",
+  files:"File Saya", generate:"Buat Gambar AI", history:"Riwayat Chat"
+};
 
-function setStatus(text, ok = false) {
-  $("statusText").textContent = text;
-  $("statusDot").classList.toggle("ok", ok);
-  $("modePill").textContent = ok ? "AI AKTIF" : "BELUM TERHUBUNG";
-  $("modePill").style.color = ok ? "var(--good)" : "var(--warn)";
+async function api(url, options={}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: { "Content-Type":"application/json", ...(options.headers||{}) }
+  });
+  const data = await response.json().catch(()=>({}));
+  if (!response.ok) throw new Error(data.error || `Request gagal (${response.status})`);
+  return data;
 }
-
 function toast(text) {
   $("toast").textContent = text;
-  $("toast").classList.remove("hidden");
+  $("toast").classList.add("show");
+  setTimeout(()=>$("toast").classList.remove("show"),2800);
 }
-
-function clearToast() {
-  $("toast").classList.add("hidden");
-  $("toast").textContent = "";
+function toggleMenu(){ $("sidebar").classList.toggle("open"); }
+function showView(name) {
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  $("view-"+name).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===name));
+  $("pageTitle").textContent=titles[name]||"Nifnyx AI";
+  $("sidebar").classList.remove("open");
+  if(name==="gallery") loadGallery();
+  if(name==="files") loadFiles();
+  if(name==="history") loadHistory();
 }
-
-function addMessage(text, who, imageUrl = null) {
-  const row = document.createElement("div");
-  row.className = "message " + who;
-
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
-  avatar.textContent = who === "user" ? "👤" : "✦";
-
-  const content = document.createElement("div");
-  content.className = "content";
-
-  const label = document.createElement("div");
-  label.className = "label";
-  label.textContent = who === "user" ? "Lu" : "Nifnyx AI";
-
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-
-  if (imageUrl) {
-    const im = document.createElement("img");
-    im.className = "attached-img";
-    im.src = imageUrl;
-    im.alt = "Gambar yang dilampirkan";
-    bubble.appendChild(im);
-  }
-
-  if (text) {
-    const txt = document.createElement("div");
-    txt.textContent = text;
-    bubble.appendChild(txt);
-  }
-
-  content.append(label, bubble);
-  row.append(avatar, content);
-  chat.appendChild(row);
-  chat.scrollTop = chat.scrollHeight;
-  return bubble;
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+function updateCount(){ $("count").textContent=$("prompt").value.length.toLocaleString("id-ID")+" / 30.000"; }
+function addMessage(role,text) {
+  const el=document.createElement("div");
+  el.className="msg "+(role==="user"?"user":"ai");
+  const who=document.createElement("span");
+  who.className="who"; who.textContent=role==="user"?"KAMU":"NIFNYX AI";
+  const body=document.createElement("div"); body.textContent=text;
+  el.append(who,body); $("messages").appendChild(el);
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
-
-function showWelcome() {
-  const section = document.createElement("section");
-  section.className = "welcome";
-  section.id = "welcome";
-  section.innerHTML =
-    '<div class="orb">✦</div>' +
-    '<h2>Chat baru dimulai.</h2>' +
-    '<p>Ada yang ingin lu tanyakan ke Nifnyx?</p>';
-  chat.appendChild(section);
+function newChat(){
+  conversationId=null; attachments=[];
+  $("messages").replaceChildren();
+  addMessage("assistant","Chat baru siap, bro! Ada yang mau lu tanyain?");
+  $("prompt").value=""; updateCount(); renderAttachments(); showView("chat");
 }
-
-async function checkBackend() {
-  try {
-    const r = await fetch("/api/health", { cache: "no-store" });
-    if (!r.ok) throw new Error("Backend tidak merespons.");
-
-    const d = await r.json();
-
-    if (d.chatConfigured === true) {
-      setStatus("Backend siap • Nifnyx AI", true);
-      clearToast();
-    } else {
-      setStatus("Backend aktif, API belum terbaca");
-      toast("Server belum mendeteksi OPENROUTER_API_KEY. Periksa Environment Variables Abasthan.");
-    }
-  } catch (err) {
-    setStatus("Backend belum terhubung");
-    toast("Tidak bisa menghubungi backend. Periksa status deployment Abasthan.");
-  }
+function renderAttachments(){
+  $("attachmentList").textContent=attachments.length
+    ? "Lampiran: "+attachments.map(f=>f.name).join(", ")
+    : "";
 }
-
-function fileToDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
+function clearAttachments(){attachments=[];renderAttachments();}
+function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(new Error("Gagal membaca file."));
     reader.readAsDataURL(file);
   });
 }
-
-$("attach").addEventListener("click", () => imageInput.click());
-
-imageInput.addEventListener("change", async () => {
-  clearToast();
-  const file = imageInput.files[0];
-  if (!file) return;
-
-  if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
-    toast("Pilih gambar JPG, PNG, WEBP, atau GIF.");
-    imageInput.value = "";
-    return;
-  }
-
-  if (file.size > 5 * 1024 * 1024) {
-    toast("Ukuran gambar maksimal 5 MB.");
-    imageInput.value = "";
-    return;
-  }
-
-  try {
-    const data = await fileToDataURL(file);
-    selectedImage = { name: file.name, mime: file.type, data };
-    $("previewImg").src = data;
-    $("previewName").textContent =
-      file.name + " • " + (file.size / 1024 / 1024).toFixed(2) + " MB";
-    $("preview").classList.remove("hidden");
-    toast("Lampiran siap, tetapi backend analisis gambar belum diaktifkan. Hapus lampiran untuk mengirim chat teks.");
-  } catch {
-    toast("Gambar gagal dibaca. Coba pilih ulang.");
-  }
-});
-
-function removeSelectedImage() {
-  selectedImage = null;
-  imageInput.value = "";
-  $("preview").classList.add("hidden");
-  $("previewImg").removeAttribute("src");
-  clearToast();
+async function uploadFile(file){
+  if(file.size>5*1024*1024) throw new Error(file.name+" melebihi 5 MB.");
+  const dataUrl=await fileToDataURL(file);
+  return api("/api/files",{method:"POST",body:JSON.stringify({name:file.name,dataUrl})});
 }
-
-$("removeImage").addEventListener("click", removeSelectedImage);
-
-async function submitMessage(text) {
-  text = text.trim();
-
-  if (busy) return;
-
-  if (selectedImage) {
-    toast("Bro, backend saat ini baru mendukung chat teks. Tekan × untuk menghapus gambar dulu.");
-    return;
+async function uploadAttachments(files){
+  for(const file of Array.from(files).slice(0,4)){
+    try{
+      const result=await uploadFile(file);
+      attachments.push(result.file);
+      toast("File terunggah: "+file.name);
+    }catch(e){toast(e.message);}
   }
-
-  if (!text) return;
-
-  busy = true;
-  clearToast();
-  send.disabled = true;
-  $("attach").disabled = true;
-  $("welcome")?.remove();
-
-  // Kirim pesan baru secara terpisah dari riwayat sebelumnya.
-  const previousHistory = history.slice(-12);
-
-  addMessage(text, "user");
-  input.value = "";
-  input.style.height = "auto";
-
-  const bubble = addMessage("•••", "assistant");
-  bubble.classList.add("typing");
-
-  try {
-    const r = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: text,
-        history: previousHistory
-      })
-    });
-
-    const data = await r.json().catch(() => ({}));
-
-    if (!r.ok) {
-      throw new Error(
-        data.error || "Permintaan gagal (" + r.status + ")."
-      );
+  renderAttachments(); $("chatFiles").value="";
+}
+async function sendChat(){
+  const message=$("prompt").value.trim();
+  if(!message||busy)return;
+  busy=true;$("sendBtn").disabled=true;
+  addMessage("user",message+(attachments.length?"\n📎 "+attachments.map(f=>f.name).join(", "):""));
+  $("prompt").value="";updateCount();
+  const waiting=document.createElement("div");
+  waiting.className="msg ai";waiting.textContent="Nifnyx sedang berpikir...";
+  $("messages").appendChild(waiting);
+  try{
+    const result=await api("/api/chat",{method:"POST",body:JSON.stringify({
+      message,conversationId,fileIds:attachments.map(f=>f.id)
+    })});
+    conversationId=result.conversationId;
+    waiting.remove();addMessage("assistant",result.answer);
+    attachments=[];renderAttachments();
+  }catch(e){waiting.remove();addMessage("assistant","Gagal: "+e.message);}
+  finally{busy=false;$("sendBtn").disabled=false;}
+}
+$("prompt").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}
+});
+async function analyzePhoto(){
+  const file=$("analyzeFile").files[0];
+  if(!file)return toast("Pilih foto dulu.");
+  if(file.size>5*1024*1024)return toast("Ukuran foto maksimal 5 MB.");
+  const btn=$("analyzeBtn");btn.disabled=true;btn.textContent="Menganalisis...";
+  $("analyzeResult").textContent="";
+  try{
+    const dataUrl=await fileToDataURL(file);
+    const result=await api("/api/analyze",{method:"POST",body:JSON.stringify({
+      prompt:$("analyzePrompt").value,dataUrl
+    })});
+    $("analyzeResult").textContent=result.answer;
+  }catch(e){$("analyzeResult").textContent="Analisis gagal: "+e.message;}
+  finally{btn.disabled=false;btn.textContent="Analisis Foto ✦";}
+}
+function previewImage(input,target){
+  const file=input.files[0],img=$(target);
+  if(!file){img.hidden=true;return;}
+  if(file.size>5*1024*1024){toast("Ukuran gambar maksimal 5 MB.");input.value="";img.hidden=true;return;}
+  img.src=URL.createObjectURL(file);img.hidden=false;
+}
+async function generateImage(){
+  const prompt=$("imagePrompt").value.trim();
+  if(!prompt)return toast("Isi prompt gambar dulu.");
+  const btn=$("generateBtn");btn.disabled=true;btn.textContent="Sedang membuat gambar...";
+  $("generateResult").textContent="Permintaan dikirim. Proses dapat memerlukan waktu.";
+  try{
+    const result=await api("/api/images/generate",{method:"POST",body:JSON.stringify({prompt})});
+    $("generateResult").replaceChildren();
+    const img=document.createElement("img");
+    img.className="preview";img.alt="Gambar hasil generasi";img.src=result.image.url;
+    const caption=document.createElement("p");caption.className="small";caption.textContent="Model: "+result.model;
+    const link=document.createElement("a");link.href=result.image.url;link.download="nifnyx-image.png";link.className="btn";link.textContent="Buka / simpan gambar";
+    $("generateResult").append(img,caption,link);
+    toast("Gambar berhasil dibuat.");loadGallery();
+  }catch(e){$("generateResult").textContent="Gagal membuat gambar: "+e.message;}
+  finally{btn.disabled=false;btn.textContent="✧ Generate Image";}
+}
+async function loadGallery(){
+  const root=$("galleryGrid");root.replaceChildren();
+  try{
+    const items=await api("/api/gallery");
+    if(!items.length){root.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada gambar. Coba menu Buat Gambar AI.</div>';return;}
+    for(const item of items){
+      const fig=document.createElement("figure"),img=document.createElement("img"),cap=document.createElement("figcaption");
+      img.src=item.url;img.alt="Gambar galeri";
+      cap.textContent=item.prompt;
+      fig.append(img,cap);root.appendChild(fig);
     }
-
-    // server.js mengembalikan { answer: "..." }
-    const answer = data.answer;
-
-    if (typeof answer !== "string" || !answer.trim()) {
-      throw new Error("Server tidak mengembalikan jawaban teks.");
+  }catch(e){root.innerHTML='<div class="empty">Galeri gagal dimuat: '+escapeHTML(e.message)+'</div>';}
+}
+async function uploadSingleFile(){
+  const input=$("uploadFile"),file=input.files[0];
+  if(!file)return toast("Pilih file dulu.");
+  try{await uploadFile(file);input.value="";toast("File berhasil diunggah.");loadFiles();}
+  catch(e){toast(e.message);}
+}
+async function loadFiles(){
+  const root=$("fileList");root.replaceChildren();
+  try{
+    const items=await api("/api/files");
+    if(!items.length){root.innerHTML='<div class="empty">Belum ada file tersimpan.</div>';return;}
+    for(const f of items){
+      const row=document.createElement("div");row.className="list-item";
+      const info=document.createElement("div"),name=document.createElement("strong"),meta=document.createElement("small");
+      name.textContent=f.name;meta.textContent=f.mime+" · "+(f.size/1024).toFixed(1)+" KB";
+      info.append(name,meta);
+      const actions=document.createElement("div");actions.className="tools";
+      const download=document.createElement("a");download.className="btn";download.textContent="Unduh";download.href="/api/files/"+encodeURIComponent(f.id)+"/download";
+      const del=document.createElement("button");del.className="btn danger";del.textContent="Hapus";
+      del.onclick=async()=>{if(!confirm("Hapus file ini?"))return;try{await api("/api/files/"+f.id,{method:"DELETE"});loadFiles();}catch(e){toast(e.message);}};
+      actions.append(download,del);row.append(info,actions);root.append(row);
     }
-
-    bubble.classList.remove("typing");
-    bubble.textContent = answer;
-
-    history.push(
-      { role: "user", content: text },
-      { role: "assistant", content: answer }
-    );
-
-    history = history.slice(-12);
-    setStatus("Terhubung ke model AI", true);
-    clearToast();
-
-  } catch (err) {
-    bubble.classList.remove("typing");
-    bubble.textContent =
-      "Maaf, Nifnyx belum bisa menjawab.\n\n" +
-      (err.message || "Periksa koneksi dan konfigurasi backend.");
-
-    toast("Pesan gagal diproses. Periksa error di atas.");
-  } finally {
-    busy = false;
-    send.disabled = false;
-    $("attach").disabled = false;
-    input.focus();
-    chat.scrollTop = chat.scrollHeight;
+  }catch(e){root.innerHTML='<div class="empty">Gagal memuat file: '+escapeHTML(e.message)+'</div>';}
+}
+async function loadHistory(){
+  const root=$("historyList");root.replaceChildren();
+  try{
+    const items=await api("/api/conversations");
+    if(!items.length){root.innerHTML='<div class="empty">Belum ada riwayat chat.</div>';return;}
+    for(const c of items){
+      const row=document.createElement("div");row.className="list-item";
+      const info=document.createElement("div"),name=document.createElement("strong"),meta=document.createElement("small");
+      name.textContent=c.title||"Percakapan";meta.textContent=c.messages+" pesan · "+new Date(c.updatedAt).toLocaleString("id-ID");
+      info.append(name,meta);
+      const actions=document.createElement("div");actions.className="tools";
+      const open=document.createElement("button");open.className="btn";open.textContent="Buka";
+      open.onclick=async()=>{
+        try{
+          const full=await api("/api/conversations/"+c.id);
+          conversationId=full.id;$("messages").replaceChildren();
+          full.messages.forEach(m=>addMessage(m.role,m.content));
+          showView("chat");
+        }catch(e){toast(e.message);}
+      };
+      const del=document.createElement("button");del.className="btn danger";del.textContent="Hapus";
+      del.onclick=async()=>{if(!confirm("Hapus riwayat ini?"))return;try{await api("/api/conversations/"+c.id,{method:"DELETE"});loadHistory();}catch(e){toast(e.message);}};
+      actions.append(open,del);row.append(info,actions);root.append(row);
+    }
+  }catch(e){root.innerHTML='<div class="empty">Gagal memuat riwayat: '+escapeHTML(e.message)+'</div>';}
+}
+function escapeHTML(text){
+  return String(text).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+async function checkHealth(){
+  try{
+    const h=await api("/api/health");
+    $("statusText").textContent=h.chatConfigured?"Server online":"API key belum dipasang";
+    if(!h.chatConfigured) $("statusText").style.color="var(--bad)";
+  }catch{
+    $("statusText").textContent="Server belum terhubung";
+    $("statusText").style.color="var(--bad)";
   }
 }
-
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  submitMessage(input.value);
-});
-
-input.addEventListener("input", () => {
-  input.style.height = "auto";
-  input.style.height = Math.min(input.scrollHeight, 125) + "px";
-});
-
-input.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    form.requestSubmit();
-  }
-});
-
-document.querySelectorAll("[data-q]").forEach(button => {
-  button.addEventListener("click", () => {
-    submitMessage(button.dataset.q);
-  });
-});
-
-$("newChat").addEventListener("click", () => {
-  if (busy) return;
-  history = [];
-  chat.replaceChildren();
-  showWelcome();
-  clearToast();
-  input.focus();
-});
-
-checkBackend();
+checkHealth();
 </script>
 </body>
 </html>
