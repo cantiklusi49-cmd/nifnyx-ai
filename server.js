@@ -1265,11 +1265,19 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Terjadi kesalahan pada server Nifnyx AI.' });
 });
 
-await initStorage();
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Nifnyx AI berjalan di port ${PORT}`);
-  console.log(`Chat model: ${CHAT_MODEL}`);
-  console.log(`Vision model: ${VISION_MODEL}`);
-  console.log(`Image model: ${IMAGE_MODEL || 'belum dikonfigurasi'}`);
-  console.log(`Pencarian web: ${TAVILY_KEY ? 'aktif' : 'belum dikonfigurasi'}`);
-});
+try {
+  console.log('[STARTUP] Memulai initStorage...');
+  await initStorage();
+  console.log('[STARTUP] initStorage berhasil.');
+
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Nifnyx AI berjalan di port ${PORT}`);
+    console.log(`Chat model: ${CHAT_MODEL}`);
+    console.log(`Vision model: ${VISION_MODEL}`);
+    console.log(`Image model: ${IMAGE_MODEL || 'belum dikonfigurasi'}`);
+    console.log(`Pencarian web: ${TAVILY_KEY ? 'aktif' : 'belum dikonfigurasi'}`);
+  });
+} catch (error) {
+  console.error('[STARTUP ERROR]', error);
+  process.exit(1);
+}
