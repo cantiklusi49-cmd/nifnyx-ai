@@ -45,6 +45,10 @@ const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 const SESSION_COOKIE = 'nifnyx_admin_session';
 const sessions = new Map();
 
+if (ADMIN_PASSWORD.length < 12) {
+  console.error('NIFNYX_ADMIN_PASSWORD wajib minimal 12 karakter.');
+  process.exit(1);
+}
 console.log('[DEBUG] Server mulai membaca konfigurasi');
 console.log('[DEBUG] ADMIN_PASSWORD tersedia:', Boolean(ADMIN_PASSWORD));
 console.log('[DEBUG] Panjang password:', ADMIN_PASSWORD.length);
