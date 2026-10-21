@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-  "start": "node --check server.js && node --trace-uncaught server.js"
-  }
+    "start": "node --check server.js && node --trace-uncaught server.js"
+  },
   "engines": {
     "node": ">=20"
   },
@@ -14,3 +14,4 @@
     "express-rate-limit": "^8.0.0"
   }
 }
+
