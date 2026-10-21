@@ -799,6 +799,11 @@ async function searchWeb(query, wantImages = false) {
 
   const data = await readJson(response);
   if (!response.ok) throw Error('Pencarian web gagal.');
+  console.log('[DEBUG OpenRouter]', JSON.stringify({
+  status: response.status,
+  model,
+  data
+}).slice(0, 4000));
 
   const results = (Array.isArray(data.results) ? data.results : [])
     .map(x => ({
